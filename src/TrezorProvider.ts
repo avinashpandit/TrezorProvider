@@ -2,7 +2,7 @@ import * as Trezor from "./trezor";
 import { TrezorAccount } from './trezor-account';
 import { NEMLibrary, NetworkTypes, Transaction, SignedTransaction, TransferTransaction,
     TimeWindow, XEM, Address, TransactionHttp, PlainMessage , NemAnnounceResult} from 'nem-library';
-import { TRANSPORT_EVENT,  TRANSPORT} from "trezor-connect";
+import { TRANSPORT_EVENT,  TRANSPORT , DEVICE_EVENT , DEVICE} from "trezor-connect";
 import TrezorConnect from "trezor-connect";
 
 class TrezorProvider {
@@ -23,8 +23,9 @@ class TrezorProvider {
     async init() {
         try
         {
-            const lazyLoad = false;
+            const lazyLoad = true;
             const debug = false;
+            const self = this;
             if(!this.initialized){    
                 await Trezor.initializeTrezor(debug , lazyLoad);     
                 this.initialized = true;
@@ -33,12 +34,24 @@ class TrezorProvider {
                 TrezorConnect.on(TRANSPORT_EVENT, event => {
                     if (event.type === TRANSPORT.ERROR) {
                         // trezor-bridge not installed
-                        this.connected = false;
+                        self.connected = false;
                         console.error('Unable to aquire transport. Please check USB connection or see if Trezor Bridge running.')
                     }
                     if (event.type === TRANSPORT.START) {
-                        this.connected = true;
+                        self.connected = true;
                         console.error('Trezor Connected !!!');
+                    }
+                });
+
+                // Listen to DEVICE_EVENT
+                TrezorConnect.on(DEVICE_EVENT, event => {
+                    console.log(`Device Event ${event.type}`);
+                    if(event.type == DEVICE.CONNECT)
+                    {
+                        self.connected = true;
+                    }
+                    else if(event.type == DEVICE.DISCONNECT){
+                        self.connected = false;    
                     }
                 });
 

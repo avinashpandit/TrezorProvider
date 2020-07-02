@@ -1,14 +1,17 @@
 import trezorProvider from '../TrezorProvider';
 
 async function main() {
-    console.log(`TrezorProvider : ${JSON.stringify(trezorProvider)}`)
     if(!trezorProvider.initialized)
     {
         // initialize first 
         await trezorProvider.init();
     }
 
+    console.log(`Trezor Connected ${trezorProvider.connected}`);
+
     const account = await trezorProvider.getAccount(0);
+
+    console.log(`Trezor Connected ${trezorProvider.connected}`);
 
     const transaction = trezorProvider.createTransaction('NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R' , 10 , '1001');
     const signedTransaction = await trezorProvider.signTransaction(transaction , account);
