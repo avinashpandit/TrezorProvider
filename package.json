@@ -8,7 +8,8 @@
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "nemTest" : "node --inspect ./build/src/test/nem-sample-test.js"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
@@ -36,11 +37,11 @@
     "XEMWallet"
   ],
   "directories": {
-    "lib": "./build"
+    "lib": "./build/src"
   },
-  "main": "./build/index.js",
+  "main": "./build/src/TrezorProvider.js",
   "files": [
-    "build"
+    "build/src"
   ],
   "author": {
     "name": "Avinash Pandit",
@@ -62,7 +63,7 @@
     "url": "https://github.com/avinashpandit/TrezorProvider.git/issues"
   },
   "engines": {
-    "node": ">= 10.x.x",
+    "node": ">= 12.x.x",
     "npm": ">= 5.3.0"
   },
   "license": "MIT"

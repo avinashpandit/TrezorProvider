@@ -3,7 +3,10 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
-    "removeComments": true
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
+    "target": "es2017"
   },
   "include": [
     "src/**/*"

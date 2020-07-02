@@ -1,37 +1,21 @@
-// import Trezor = require("./vendor/connect.js");
-// let TrezorConnect = Trezor.TrezorConnect();
 import TrezorConnect from "trezor-connect";
 import { NetworkTypes } from "nem-library";
 
-TrezorConnect.init({
-  //connectSrc: './assets/trezor-connect/',
-  popup: true, // render your own UI
-  webusb: true, // webusb is not supported in electron
-  debug: true, // see what's going on inside connect
-  lazyLoad: false, // set to "false" (default) if you want to start communication with bridge on application start (and detect connected device right away)
-  // set it to "true", then trezor-connect will not be initialized until you call some TrezorConnect.method()
-  // this is useful when you don't know if you are dealing with Trezor user
-  manifest: {
-      email: 'email@developer.com',
-      appUrl: 'electron-app-boilerplate',
-  },
-}).then(() => {
-  console.log('TrezorConnect is ready!');
-}).catch(error => {
-  console.error('Error in TrezorConnect ' , error);
-});
-
-
-// const createWallet = (network) => {
-//   return TrezorConnect
-//     .createAccount(network, 0, "Primary")
-//     .then((account) => ({
-//       "name": "TREZOR",
-//       "accounts": {
-//         "0": account,
-//       }
-//     }));
-// };
+const initializeTrezor = async (debug : boolean , lazyLoad : boolean) : Promise<void> => {
+  return TrezorConnect.init({
+    //connectSrc: './assets/trezor-connect/',
+    popup: true, // render your own UI
+    webusb: true, // webusb is not supported in electron
+    debug: debug, // see what's going on inside connect
+    lazyLoad: lazyLoad, // set to "false" (default) if you want to start communication with bridge on application start (and detect connected device right away)
+    // set it to "true", then trezor-connect will not be initialized until you call some TrezorConnect.method()
+    // this is useful when you don't know if you are dealing with Trezor user
+    manifest: {
+        email: 'avinash.pandit@integral.com',
+        appUrl: 'hw-Trezor-Provider',
+    },
+  });
+}
 
 const bip44 = (network: number, index: number) => {
   const coinType = network === -104
@@ -63,18 +47,6 @@ const createAccount = async (network: number, index: number) => {
   }
 };
 
-// TODO: this can be done with the new trezor-connect
-// review the encrypt/decrypt logic
-// const getPubKey = (path) => {
-//   TrezorConnect = Trezor.TrezorConnect();
-//   return new Promise((resolve, reject) => {
-//     TrezorConnect.getXPubKey(undefined, (pubK) => {
-//       resolve(pubK);
-//     });
-//   });
-// };
-
-
 const serialize = async (transaction, hdKeypath, keepSession?) => {
   const result = await TrezorConnect.nemSignTransaction({
     path: hdKeypath,
@@ -102,5 +74,5 @@ const showAccount = async (account) => {
 };
 
 export {
-  createAccount, serialize, showAccount,
+  createAccount, serialize, showAccount, initializeTrezor
 };

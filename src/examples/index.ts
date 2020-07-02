@@ -1,6 +1,6 @@
 import { NEMLibrary, NetworkTypes, Transaction, TransferTransaction,
     TimeWindow, XEM, Address, TransactionHttp, PlainMessage} from 'nem-library';
-import { TrezorAccount } from './trezor-account';
+import { TrezorAccount } from '../trezor-account';
  
 // 0. This function will bootstrap both the internal nem-library for nem-trezor and the local one
 // if the local version of nem-library and the one in nem-trezor don't match then this will give problems

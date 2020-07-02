@@ -35,6 +35,14 @@ export class TrezorAccount {
     });
   }
 
+  public async signTransactionPromise(transaction: Transaction): Promise<SignedTransaction> {
+    //transaction.signer = PublicAccount.createWithPublicKey("462ee976890916e54fa825d26bdd0235f5eb5b6a143c199ab0ae5ee9328e08ce");
+    transaction.setNetworkType(NEMLibrary.getNetworkType());
+    const dto: any = transaction.toDTO();
+    const serialized = await Trezor.serialize(dto, this.hdKeyPath);
+    return (serialized as SignedTransaction);
+  }
+
   private async signSerialTransactionsPromise(transactions: Transaction[]): Promise<SignedTransaction[]> {
     const dtos = transactions.map(t => {
       //t.signer = PublicAccount.createWithPublicKey("462ee976890916e54fa825d26bdd0235f5eb5b6a143c199ab0ae5ee9328e08ce");
@@ -68,13 +76,9 @@ export class TrezorAccount {
       });
   }
 
-  /**
-   * Decrypts an encrypted message
-   * @param encryptedMessage
-   * @param recipientPublicAccount
-   * @returns {PlainMessage}
-   */
-  // public decryptMessage(encryptedMessage: EncryptedMessage, recipientPublicAccount: PublicAccount): PlainMessage {
-  //   return EncryptedMessage.decrypt(encryptedMessage, this.privateKey, recipientPublicAccount);
-  // }
+  public static async getAccountPromise(index: number): Promise<TrezorAccount> {
+    const account = await Trezor.createAccount(NEMLibrary.getNetworkType(), index);
+    return new TrezorAccount(account.hdKeypath);
+  }
+
 }
