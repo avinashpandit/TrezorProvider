@@ -20,11 +20,9 @@ class TrezorProvider {
         this.transactionHttp = new TransactionHttp();
     }
 
-    async init() {
+    async init(debug : boolean , lazyLoad : boolean) {
         try
         {
-            const lazyLoad = true;
-            const debug = false;
             const self = this;
             if(!this.initialized){    
                 await Trezor.initializeTrezor(debug , lazyLoad);     

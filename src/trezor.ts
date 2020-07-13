@@ -4,8 +4,8 @@ import { NetworkTypes } from "nem-library";
 const initializeTrezor = async (debug : boolean , lazyLoad : boolean) : Promise<void> => {
   return TrezorConnect.init({
     //connectSrc: './assets/trezor-connect/',
-    popup: true, // render your own UI
-    webusb: true, // webusb is not supported in electron
+    popup: false, // render your own UI
+    webusb: false, // webusb is not supported in electron
     debug: debug, // see what's going on inside connect
     lazyLoad: lazyLoad, // set to "false" (default) if you want to start communication with bridge on application start (and detect connected device right away)
     // set it to "true", then trezor-connect will not be initialized until you call some TrezorConnect.method()
