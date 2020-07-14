@@ -2,6 +2,7 @@ import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , Confi
 import { TrezorAccount } from '../trezor-account';
 import { map } from 'rxjs/operators';
 import { TransactionMessage } from '../index';
+import {Address} from "nem-library";
 
 class NEMApi {
 
@@ -11,9 +12,11 @@ class NEMApi {
     }
 
     //only returns latest 10 transactions
-    async getTransactions(address) {
+    async getTransactions(addr : string) {
         const self = this;
-        console.log(`Getting txs for NEM Account ${address} `);
+        console.log(`Getting txs for NEM Account ${addr} `);
+        const address = new Address(addr);
+
         const incomingTransactions = await new AccountHttp().incomingTransactions(address).toPromise() ;
         const data = {txs : []}
         for(const txGeneric of incomingTransactions)
@@ -51,9 +54,10 @@ class NEMApi {
     }
 
 
-    getConfirmedTransactionsObserver(address)
+    getConfirmedTransactionsObserver(addr : string)
     {
         const self = this;
+        const address = new Address(addr);
         const confirmedTxListener = new ConfirmedTransactionListener().given(address);
         return confirmedTxListener.pipe(map(txGeneric => self.getTransactionMessage(txGeneric)));
     }

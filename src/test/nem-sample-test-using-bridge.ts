@@ -1,6 +1,6 @@
 import trezorProvider from '../TrezorProvider';
 import {BigNumber} from "bignumber.js";
-import {Address } from "nem-library";
+import {Address} from "nem-library";
 
 async function main() {
 
@@ -18,7 +18,7 @@ async function main() {
     const bridge = await trezorProvider.getBridge(ccy);
 
 
-    const address = new Address("NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R");
+    const address = "NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R";
     
     /*
     const incomingTransactionsListener = new AccountHttp().incomingTransactions(address );
