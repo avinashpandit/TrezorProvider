@@ -66,7 +66,7 @@ class TrezorProvider {
     async getAPI(ccy : string)
     {
         console.log(`Calling getAPI ${ccy}`);
-        if(ccy === 'NEM')
+        if(ccy === 'XEM')
         {
             return nemapi; 
         }
@@ -77,7 +77,7 @@ class TrezorProvider {
     async getBridge(ccy : string)
     {
         console.log(`Calling getBridge ${ccy}`);
-        if(ccy === 'NEM')
+        if(ccy === 'XEM')
         {
             return nembridge; 
         }
