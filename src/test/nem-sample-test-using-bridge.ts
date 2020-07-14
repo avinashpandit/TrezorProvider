@@ -1,7 +1,19 @@
 import trezorProvider from '../TrezorProvider';
 import {BigNumber} from "bignumber.js";
+import {AccountListener, Address, UnconfirmedTransactionListener , ConfirmedTransactionListener, AccountHttp, QueryParams, TransferTransaction, Transaction} from "nem-library";
 
 async function main() {
+
+    type TransactionMessage = {
+        id : string;
+        from?: string;
+        to: string;
+        block? : number;
+        confirmations: number;
+        received_at? : number;
+        metadata? : {value : number , symbol : string , message : string};
+    }
+      
     const ccy = 'NEM';
     if(!trezorProvider.initialized)
     {
@@ -15,10 +27,51 @@ async function main() {
     const api = await trezorProvider.getAPI(ccy);
     const bridge = await trezorProvider.getBridge(ccy);
 
+
+    const address = new Address("NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R");
+    
+    /*
+    const incomingTransactionsListener = new AccountHttp().incomingTransactions(address );
+    incomingTransactionsListener.subscribe(x => {
+        console.log(`Incoming TX ${x}`);
+        console.log(x);
+    }, err => {
+        console.log(err);
+    });
+*/
+    //promise version 
+    /*
+    const unconfirmedTxListener = new UnconfirmedTransactionListener().given(address);
+    unconfirmedTxListener.subscribe(x => {
+        console.log(`Unconfirmed TX ${x}`);
+        console.log(x);
+    }, err => {
+        console.log(err);
+    });
+
+    const confirmedTxListener = new ConfirmedTransactionListener().given(address);
+    confirmedTxListener.subscribe(x => {
+        console.log(`Confirmed TX ${x}`);
+        console.log(x);
+    }, err => {
+        console.log(err);
+    });
+    */
+
     if(api && bridge)
     {
         console.log(`Trezor Connected ${trezorProvider.connected}`);
-        const account = await api.getAccount(0);
+        const data = await api.getTransactions(address);
+        for(const tx of data.txs)
+        {
+            console.log(tx);
+        }
+
+        const txListener = api.getConfirmedTransactionsObserver(address);
+        txListener.subscribe(tx => {
+            console.log(tx);
+        });
+
         const transaction = await bridge.createTransaction('NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R' , new BigNumber(1) , 'testsource-account' , '1001' , undefined);
         const signedTransaction = await bridge.signTransaction(transaction , 0 , undefined);
         console.log(`SignedTransaction : ${JSON.stringify(signedTransaction)}`);
@@ -27,7 +80,7 @@ async function main() {
         const response = await api.broadcastTransaction(signedTransaction);
         console.log(`BroadcastTransaction : ${JSON.stringify(response)}`);
         
-        }
+    }
     else{
         console.error('Unable to get bridge or api for NEM');
     }
