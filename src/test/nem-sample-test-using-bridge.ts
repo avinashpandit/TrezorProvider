@@ -1,20 +1,10 @@
 import trezorProvider from '../TrezorProvider';
 import {BigNumber} from "bignumber.js";
-import {AccountListener, Address, UnconfirmedTransactionListener , ConfirmedTransactionListener, AccountHttp, QueryParams, TransferTransaction, Transaction} from "nem-library";
+import {Address } from "nem-library";
 
 async function main() {
 
-    type TransactionMessage = {
-        id : string;
-        from?: string;
-        to: string;
-        block? : number;
-        confirmations: number;
-        received_at? : number;
-        metadata? : {value : number , symbol : string , message : string};
-    }
-      
-    const ccy = 'NEM';
+    const ccy = 'XEM';
     if(!trezorProvider.initialized)
     {
         // initialize first 

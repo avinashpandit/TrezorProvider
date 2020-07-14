@@ -1,16 +1,7 @@
 import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp} from 'nem-library';
 import { TrezorAccount } from '../trezor-account';
 import { map } from 'rxjs/operators';
-
-type TransactionMessage = {
-    id : string;
-    from?: string;
-    to: string;
-    block? : number;
-    confirmations: number;
-    received_at? : number;
-    metadata? : {value : number , symbol : string , message : string};
-}
+import { TransactionMessage } from '../index';
 
 class NEMApi {
 
@@ -49,7 +40,7 @@ class NEMApi {
             //transaction.received_at = tx.timeWindow.timeStamp.toString();
             const xem = tx.xem();
             transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.payload};
-            console.log(tx);
+            //console.log(tx);
             return transaction;
         }
         return undefined;

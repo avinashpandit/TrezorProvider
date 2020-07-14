@@ -18,3 +18,14 @@ export declare abstract class API {
 
     getEstimatedFees(): number;
 }
+
+export declare type TransactionMessage = {
+    id : string;
+    from?: string;
+    to: string;
+    block? : number;
+    confirmations: number;
+    received_at? : number;
+    status? : string;
+    metadata? : {value : number , symbol : string , message : string};
+}
