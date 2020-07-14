@@ -43,6 +43,7 @@ class NEMApi {
             //transaction.received_at = tx.timeWindow.timeStamp.toString();
             const xem = tx.xem();
             transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.payload};
+            transaction.status = 'completed';
             //console.log(tx);
             return transaction;
         }

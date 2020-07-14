@@ -1,6 +1,5 @@
 import trezorProvider from '../TrezorProvider';
 import {BigNumber} from "bignumber.js";
-import {Address} from "nem-library";
 
 async function main() {
 
