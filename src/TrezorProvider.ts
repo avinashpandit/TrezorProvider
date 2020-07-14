@@ -1,9 +1,12 @@
 import * as Trezor from "./trezor";
 import { TrezorAccount } from './trezor-account';
-import { NEMLibrary, NetworkTypes, Transaction, SignedTransaction, TransferTransaction,
+import {  Transaction, SignedTransaction, TransferTransaction,
     TimeWindow, XEM, Address, TransactionHttp, PlainMessage , NemAnnounceResult} from 'nem-library';
 import { TRANSPORT_EVENT,  TRANSPORT , DEVICE_EVENT , DEVICE} from "trezor-connect";
 import TrezorConnect from "trezor-connect";
+
+import nembridge from './bridge/NEMBridge';
+import nemapi from './api/NEMApi';
 
 class TrezorProvider {
     public initialized: boolean;
@@ -14,7 +17,7 @@ class TrezorProvider {
     // 0. This function will bootstrap both the internal nem-library for nem-trezor and the local one
     // if the local version of nem-library and the one in nem-trezor don't match then this will give problems
     constructor() {
-        NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
+        
         this.initialized = false;
         this.connected = false;
         this.transactionHttp = new TransactionHttp();
@@ -60,6 +63,28 @@ class TrezorProvider {
         } 
     }
 
+    async getAPI(ccy : string)
+    {
+        console.log(`Calling getAPI ${ccy}`);
+        if(ccy === 'NEM')
+        {
+            return nemapi; 
+        }
+
+        return undefined;
+    }
+
+    async getBridge(ccy : string)
+    {
+        console.log(`Calling getBridge ${ccy}`);
+        if(ccy === 'NEM')
+        {
+            return nembridge; 
+        }
+
+        return undefined;
+    }
+    
     async getAccount(index : number) : Promise<TrezorAccount>
     {
         return  await TrezorAccount.getAccountPromise(index);
