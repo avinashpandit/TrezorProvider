@@ -4,7 +4,7 @@ async function main() {
     if(!trezorProvider.initialized)
     {
         // initialize first 
-        await trezorProvider.init();
+        await trezorProvider.init(true, false);
     }
 
     console.log(`Trezor Connected ${trezorProvider.connected}`);

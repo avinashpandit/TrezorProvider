@@ -19,7 +19,7 @@
             ],
             "env": { 
                 "TZ" : "UTC",
-                "NODE_DEBUG_OPTION" : "--inspect"
+                //"NODE_DEBUG_OPTION" : "--inspect"
              },
              "console": "integratedTerminal",
         }
