@@ -13,7 +13,6 @@ class NemApi {
 
     //only returns latest 10 transactions
     async getTransactions(addr : string) {
-        const self = this;
         console.log(`Getting txs for NEM Account ${addr} `);
         const address = new Address(addr);
 
@@ -21,7 +20,7 @@ class NemApi {
         const data = {txs : []}
         for(const txGeneric of incomingTransactions)
         {
-            const txn = self.getTransactionMessage(txGeneric);
+            const txn = this.getTransactionMessage(txGeneric);
             data.txs.push(txn);
         }
         return data;
@@ -45,7 +44,6 @@ class NemApi {
             transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.plain()};
             transaction.status = 'completed';
 
-            console.log(tx);
             return transaction;
         }
         return undefined;
@@ -58,10 +56,15 @@ class NemApi {
 
     getConfirmedTransactionsObserver(addr : string)
     {
-        const self = this;
         const address = new Address(addr);
         const confirmedTxListener = new ConfirmedTransactionListener().given(address);
-        return confirmedTxListener.pipe(map(txGeneric => self.getTransactionMessage(txGeneric)));
+        return confirmedTxListener.pipe(map(txGeneric => this.getTransactionMessage(txGeneric)));
+    }
+
+    getConfirmedTransactionsGenericObserver(addr : string)
+    {
+        const address = new Address(addr);
+        return new ConfirmedTransactionListener().given(address);
     }
 
     async getAccount(index : number) : Promise<TrezorAccount>
