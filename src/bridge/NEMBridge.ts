@@ -5,7 +5,7 @@ import {BigNumber} from "bignumber.js";
 import {SignedTransaction} from "nem-library";
 import Bridge from "./Bridge";
 
-class NEMBridge extends Bridge
+class NemBridge extends Bridge
 {
 
   constructor() {
@@ -42,5 +42,5 @@ class NEMBridge extends Bridge
 
 }
 
-const nembridge = new NEMBridge();
+const nembridge = new NemBridge();
 export default nembridge;

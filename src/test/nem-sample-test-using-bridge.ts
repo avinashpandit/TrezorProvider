@@ -18,6 +18,7 @@ async function main() {
 
 
     const address = "NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R";
+    const address1 = "NDJ2RKOKF632IOJR7NW7EEBCBYU4ICMYZH25M4WH";
     
     /*
     const incomingTransactionsListener = new AccountHttp().incomingTransactions(address );
@@ -58,6 +59,11 @@ async function main() {
 
         const txListener = api.getConfirmedTransactionsObserver(address);
         txListener.subscribe(tx => {
+            console.log(tx);
+        });
+
+        const txListener1 = api.getConfirmedTransactionsObserver(address1);
+        txListener1.subscribe(tx => {
             console.log(tx);
         });
 

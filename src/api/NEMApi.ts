@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { TransactionMessage } from '../index';
 import {Address} from "nem-library";
 
-class NEMApi {
+class NemApi {
 
     public transactionHttp : TransactionHttp;
     constructor() {
@@ -79,5 +79,5 @@ class NEMApi {
     }
 }
 
-const nemapi = new NEMApi();
+const nemapi = new NemApi();
 export default nemapi;

@@ -5,8 +5,8 @@ import {  Transaction, SignedTransaction, TransferTransaction,
 import { TRANSPORT_EVENT,  TRANSPORT , DEVICE_EVENT , DEVICE} from "trezor-connect";
 import TrezorConnect from "trezor-connect";
 
-import nembridge from './bridge/NEMBridge';
-import nemapi from './api/NEMApi';
+import nembridge from './bridge/NemBridge';
+import nemapi from './api/NemApi';
 
 class TrezorProvider {
     public initialized: boolean;
