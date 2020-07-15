@@ -1,4 +1,4 @@
-import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp} from 'nem-library';
+import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp, PlainMessage} from 'nem-library';
 import { TrezorAccount } from '../trezor-account';
 import { map } from 'rxjs/operators';
 import { TransactionMessage } from '../index';
@@ -41,7 +41,9 @@ class NemApi {
 
             transaction.received_at = tx.timeWindow.timeStamp.toString();
             const xem = tx.xem();
-            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.plain()};
+
+            const message : PlainMessage = <PlainMessage> tx.message ;
+            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : message ? message.plain() : ''};
             transaction.status = 'completed';
 
             return transaction;

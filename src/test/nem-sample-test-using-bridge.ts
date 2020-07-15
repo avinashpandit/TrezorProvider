@@ -19,6 +19,7 @@ async function main() {
 
     const address = "NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R";
     const address1 = "NDJ2RKOKF632IOJR7NW7EEBCBYU4ICMYZH25M4WH";
+    const address2 = 'NB4L7JE3FENQPYLSA2T4GH6P7K43SH6WYIFDZ3QY';
     
     /*
     const incomingTransactionsListener = new AccountHttp().incomingTransactions(address );
@@ -51,7 +52,7 @@ async function main() {
     if(api && bridge)
     {
         console.log(`Trezor Connected ${trezorProvider.connected}`);
-        const data = await api.getTransactions(address);
+        const data = await api.getTransactions(address2);
         for(const tx of data.txs)
         {
             console.log(tx);
@@ -62,7 +63,7 @@ async function main() {
             console.log(tx);
         });
 
-        const txListener1 = api.getConfirmedTransactionsObserver(address1);
+        const txListener1 = api.getConfirmedTransactionsObserver(address2);
         txListener1.subscribe(tx => {
             console.log(tx);
         });
