@@ -25,7 +25,7 @@ export declare type TransactionMessage = {
     to: string;
     block? : number;
     confirmations: number;
-    received_at? : number;
+    received_at? : string;
     status? : string;
     metadata? : {value : number , symbol : string , message : string};
 }

@@ -40,11 +40,12 @@ class NEMApi {
                 transaction.from = signer.address.plain();
             }
 
-            //transaction.received_at = tx.timeWindow.timeStamp.toString();
+            transaction.received_at = tx.timeWindow.timeStamp.toString();
             const xem = tx.xem();
-            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.payload};
+            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : tx.message.plain()};
             transaction.status = 'completed';
-            //console.log(tx);
+
+            console.log(tx);
             return transaction;
         }
         return undefined;
