@@ -1,6 +1,6 @@
 {
   "name": "hw-trezor-provider",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "",
   "scripts": {
     "clean": "rimraf coverage build tmp",
@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "nem-library": "^1.0.5",
+    "nem-library": "^2.0.0-RC4",
+    "nem-sdk": "^1.6.7",
     "trezor-connect": "8.1.7-extended"
   },
   "devDependencies": {
