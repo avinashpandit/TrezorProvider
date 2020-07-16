@@ -13,11 +13,8 @@
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "symbol-sdk": "0.20.6",
-    "trezor-connect": "8.1.7-extended",
-    "rxjs": "^6.5.3",
-    "utf8": "^2.1.2",
-    "js-joda" : "^1.6.2"
+    "nem-library": "^1.0.5",
+    "trezor-connect": "8.1.7-extended"
   },
   "devDependencies": {
     "@types/jest": "~26.0.0",

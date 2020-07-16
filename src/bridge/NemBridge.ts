@@ -1,8 +1,8 @@
 import { TrezorAccount } from '../trezor-account';
-import { NetworkType, Deadline, TransferTransaction,
-  UInt64, PlainMessage, Address , Mosaic , MosaicId , } from 'symbol-sdk';
+import { NEMLibrary, NetworkTypes, Transaction, TransferTransaction,
+    TimeWindow, XEM, Address, PlainMessage } from 'nem-library';
 import {BigNumber} from "bignumber.js";
-import {SignedTransaction} from 'symbol-sdk';
+import {SignedTransaction} from "nem-library";
 import Bridge from "./Bridge";
 
 class NemBridge extends Bridge
@@ -10,6 +10,7 @@ class NemBridge extends Bridge
 
   constructor() {
     super();
+    NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
   }
 
   isRecipientValid(currency : string, recipient: string) : boolean {
@@ -17,20 +18,12 @@ class NemBridge extends Bridge
   }
 
   async createTransaction(recipient: string, amount: BigNumber , source : string , tag: string, fees : BigNumber ) {
-    const recipientAddress = Address.createFromRawAddress(recipient);
-    const networkCurrencyDivisibility = 6;
-    const networkCurrencyMosaicId = new MosaicId('05D6A80DE3C9ADCA');
-
-    const mosaic = [new Mosaic (networkCurrencyMosaicId,
-      UInt64.fromUint(10 * Math.pow(10, networkCurrencyDivisibility)))];
-
-    const trans = TransferTransaction.create(
-      Deadline.create(),
-      recipientAddress,
-      mosaic,
-      PlainMessage.create(tag),
-      NetworkType.MAIN_NET,
-      UInt64.fromUint(amount.toNumber()));
+    const trans: Transaction = TransferTransaction.create(
+        TimeWindow.createWithDeadline(),
+        new Address(recipient),
+        new XEM(amount.toNumber()),
+        PlainMessage.create(tag),
+    );
 
     return trans;
   }

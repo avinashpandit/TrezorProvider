@@ -1,29 +1,24 @@
-import { Transaction, TransferTransaction  , RepositoryFactoryHttp, PlainMessage, TransactionHttp, TransactionType, TransactionInfo} from 'symbol-sdk';
+import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp, PlainMessage} from 'nem-library';
 import { TrezorAccount } from '../trezor-account';
 import { map } from 'rxjs/operators';
 import { TransactionMessage } from '../index';
-import {Address , TransactionGroup} from 'symbol-sdk';
+import {Address} from "nem-library";
 
 class NemApi {
 
     public transactionHttp : TransactionHttp;
-    public nodeUrl : string;
-    
     constructor() {
-        this.nodeUrl = 'http://alice6.nem.ninja:7890';
-        const repositoryFactory = new RepositoryFactoryHttp(this.nodeUrl);
-        this.transactionHttp = new TransactionHttp(this.nodeUrl);
-        
+        this.transactionHttp = new TransactionHttp();
     }
 
     //only returns latest 10 transactions
     async getTransactions(addr : string) {
         console.log(`Getting txs for NEM Account ${addr} `);
-        const address = Address.createFromRawAddress(addr);
+        const address = new Address(addr);
 
-        const incomingTransactions = await this.transactionHttp.search({group : TransactionGroup.Confirmed , address , type : [TransactionType.TRANSFER]}).toPromise() ;
+        const incomingTransactions = await new AccountHttp().incomingTransactions(address).toPromise() ;
         const data = {txs : []}
-        for(const txGeneric of incomingTransactions.data)
+        for(const txGeneric of incomingTransactions)
         {
             const txn = this.getTransactionMessage(txGeneric);
             data.txs.push(txn);
@@ -33,10 +28,10 @@ class NemApi {
 
     getTransactionMessage(txGeneric : Transaction): TransactionMessage
     {
-        if(txGeneric && txGeneric.type === TransactionType.TRANSFER){
+        if(txGeneric && txGeneric.type === 257){
             const tx : TransferTransaction = <TransferTransaction> txGeneric;
-            const txInfo : TransactionInfo = tx.transactionInfo;
-            const transaction : TransactionMessage = {id : txInfo.hash , block : txInfo.height.compact() , confirmations : 1 , to: (<Address>tx.recipientAddress).plain()};
+            const txInfo = tx.getTransactionInfo();
+            const transaction : TransactionMessage = {id : txInfo.hash.data , block : txInfo.height , confirmations : 1 , to: tx.recipient.plain()};
             
             const signer = tx.signer;
             if(signer && signer.address) 
@@ -44,11 +39,11 @@ class NemApi {
                 transaction.from = signer.address.plain();
             }
 
-            transaction.received_at;
-            const mosaics = tx.mosaics;
+            transaction.received_at = tx.timeWindow.timeStamp.toString();
+            const xem = tx.xem();
 
             const message : PlainMessage = <PlainMessage> tx.message ;
-            transaction.metadata = {symbol : 'XEM' , value : mosaics[0].amount.compact() , message : message ? message.payload : ''};
+            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : message ? message.plain() : ''};
             transaction.status = 'completed';
 
             return transaction;
@@ -57,15 +52,21 @@ class NemApi {
     }
 
     async getCurrentBlock() {
-        //return await new ChainHttp().getBlockchainHeight().toPromise();
+        return await new ChainHttp().getBlockchainHeight().toPromise();
     }
 
 
     getConfirmedTransactionsObserver(addr : string)
     {
-//        const address = Address.createFromRawAddress(addr);
-  //      const confirmedTxListener = new ConfirmedTransactionListener().given(address);
-    //    return confirmedTxListener.pipe(map(txGeneric => this.getTransactionMessage(txGeneric)));
+        const address = new Address(addr);
+        const confirmedTxListener = new ConfirmedTransactionListener().given(address);
+        return confirmedTxListener.pipe(map(txGeneric => this.getTransactionMessage(txGeneric)));
+    }
+
+    getConfirmedTransactionsGenericObserver(addr : string)
+    {
+        const address = new Address(addr);
+        return new ConfirmedTransactionListener().given(address);
     }
 
     async getAccount(index : number) : Promise<TrezorAccount>
@@ -74,7 +75,7 @@ class NemApi {
     }
 
     async broadcastTransaction(tx) {
-        return await this.transactionHttp.announce(tx).toPromise();
+        return await this.transactionHttp.announceTransaction(tx).toPromise();
     }
 
     async getEstimatedFees()

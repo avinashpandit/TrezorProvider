@@ -58,8 +58,7 @@ async function main() {
             console.log(tx);
         }
 
-        
-        /*const txListener = api.getConfirmedTransactionsObserver(address);
+        const txListener = api.getConfirmedTransactionsObserver(address);
         txListener.subscribe(tx => {
             console.log(tx);
         });
@@ -68,7 +67,7 @@ async function main() {
         txListener1.subscribe(tx => {
             console.log(tx);
         });
-*/
+
         const transaction = await bridge.createTransaction('NCSHSKCECOYAMFLX4QG6RMFBD5AOVE2ZN2IWII2R' , new BigNumber(1) , 'testsource-account' , '1001' , undefined);
         const signedTransaction = await bridge.signTransaction(transaction , 0 , undefined);
         console.log(`SignedTransaction : ${JSON.stringify(signedTransaction)}`);
