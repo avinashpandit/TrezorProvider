@@ -1,9 +1,10 @@
 {
   "name": "hw-trezor-provider",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "",
   "scripts": {
     "clean": "rimraf coverage build tmp",
+    "prepack": "npm run build",
     "build": "tsc -p tsconfig.release.json",
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
