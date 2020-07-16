@@ -1,5 +1,5 @@
 import TrezorConnect from "trezor-connect";
-import { NetworkTypes } from "nem-library";
+import { NetworkType } from 'symbol-sdk';
 
 const initializeTrezor = async (debug : boolean , lazyLoad : boolean) : Promise<void> => {
   return TrezorConnect.init({
@@ -26,7 +26,7 @@ const bip44 = (network: number, index: number) => {
 };
 
 const createAccount = async (network: number, index: number) => {
-  if (network === NetworkTypes.TEST_NET) {
+  if (network === NetworkType.TEST_NET) {
     network = -104;
   }
   const hdKeypath = bip44(network, index);

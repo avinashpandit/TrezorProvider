@@ -1,6 +1,6 @@
-import { Transaction } from "nem-library";
+import { Transaction } from 'symbol-sdk';
 import {BigNumber} from "bignumber.js";
-import {SignedTransaction} from "nem-library";
+import {SignedTransaction} from 'symbol-sdk';
 
 export declare abstract class Bridge {
 
