@@ -14,7 +14,6 @@ class NemApi {
 
     //only returns latest 10 transactions
     async getTransactions(addr : string) {
-        console.log(`Getting txs for NEM Account ${addr} `);
         const address = new Address(addr);
 
         const incomingTransactions = await new AccountHttp().incomingTransactions(address).toPromise() ;
@@ -58,13 +57,12 @@ class NemApi {
 
 
     async getAccountBalance(addr: string){
-        console.log(`Getting txs for NEM Account ${addr} `);
         const address = new Address(addr);
 
         const accountInfo : AccountInfoWithMetaData = await new AccountHttp().getFromAddress(address).toPromise();
         if(accountInfo && accountInfo.balance){
             const balance = accountInfo.balance.balance;
-            
+
             return new BigNumber(balance);
         }
         else{
