@@ -1,8 +1,9 @@
-import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp, PlainMessage} from 'nem-library';
+import { Transaction, TransactionHttp, TransferTransaction , AccountHttp , ConfirmedTransactionListener, ChainHttp, PlainMessage, AccountInfoWithMetaData} from 'nem-library';
 import { TrezorAccount } from '../trezor-account';
 import { map } from 'rxjs/operators';
 import { TransactionMessage } from '../index';
 import {Address} from "nem-library";
+import {BigNumber} from "bignumber.js";
 
 class NemApi {
 
@@ -53,6 +54,22 @@ class NemApi {
 
     async getCurrentBlock() {
         return await new ChainHttp().getBlockchainHeight().toPromise();
+    }
+
+
+    async getAccountBalance(addr: string){
+        console.log(`Getting txs for NEM Account ${addr} `);
+        const address = new Address(addr);
+
+        const accountInfo : AccountInfoWithMetaData = await new AccountHttp().getFromAddress(address).toPromise();
+        if(accountInfo && accountInfo.balance){
+            const balance = accountInfo.balance.balance;
+            
+            return new BigNumber(balance);
+        }
+        else{
+            return new BigNumber(0);
+        }
     }
 
 
