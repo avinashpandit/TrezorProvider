@@ -43,7 +43,7 @@ class NemApi {
             const xem = tx.xem();
 
             const message : PlainMessage = <PlainMessage> tx.message ;
-            transaction.metadata = {symbol : 'XEM' , value : xem.amount , message : message ? message.plain() : ''};
+            transaction.metadata = {symbol : 'XEM' , value : xem.quantity , message : message ? message.plain() : ''};
             transaction.status = 'completed';
 
             return transaction;

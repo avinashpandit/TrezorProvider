@@ -1,10 +1,12 @@
 import * as Trezor from "./trezor";
-import { Observable } from "rxjs";
+
 import {
   Transaction, SignedTransaction,
   NEMLibrary
 } from "nem-library";
-
+import { Observable } from 'rxjs/Observable';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { map } from 'rxjs/operators';
 /**
  * TrezorAccount model
  */
@@ -29,10 +31,10 @@ export class TrezorAccount {
     //transaction.signer = PublicAccount.createWithPublicKey("462ee976890916e54fa825d26bdd0235f5eb5b6a143c199ab0ae5ee9328e08ce");
     transaction.setNetworkType(NEMLibrary.getNetworkType());
     const dto: any = transaction.toDTO();
-    const serialized = Observable.fromPromise(Trezor.serialize(dto, this.hdKeyPath));
-    return serialized.map((serializedTransaction) => {
+    const serialized = fromPromise(Trezor.serialize(dto, this.hdKeyPath));
+    return serialized.pipe(map((serializedTransaction) => {
       return (serializedTransaction as SignedTransaction);
-    });
+    }));
   }
 
   public async signTransactionPromise(transaction: Transaction): Promise<SignedTransaction> {
@@ -59,7 +61,7 @@ export class TrezorAccount {
   }
 
   public signSerialTransactions(transactions: Transaction[]): Observable<SignedTransaction[]> {
-    return Observable.fromPromise(this.signSerialTransactionsPromise(transactions));
+    return fromPromise(this.signSerialTransactionsPromise(transactions));
   }
 
   /**
@@ -70,10 +72,10 @@ export class TrezorAccount {
    * @returns {Account}
    */
   public static getAccount(index: number): Observable<TrezorAccount> {
-    return Observable.fromPromise(Trezor.createAccount(NEMLibrary.getNetworkType(), index))
-      .map((account: any) => {
+    return fromPromise(Trezor.createAccount(NEMLibrary.getNetworkType(), index))
+      .pipe(map((account: any) => {
         return new TrezorAccount(account.hdKeypath);
-      });
+      }));
   }
 
   public static async getAccountPromise(index: number): Promise<TrezorAccount> {

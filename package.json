@@ -1,6 +1,6 @@
 {
   "name": "hw-trezor-provider",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "",
   "scripts": {
     "clean": "rimraf coverage build tmp",
@@ -9,12 +9,13 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "nemTest" : "node ./build/src/test/nem-sample-test-using-bridge.js"
+    "nemTest": "node ./build/src/test/nem-sample-test-using-bridge.js"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
     "nem-library": "^2.0.0-RC4",
-    "nem-sdk": "^1.6.7",
+    "rxjs": "^6.6.0",
+    "rxjs-compat" : "^6.6.0",
     "trezor-connect": "8.1.7-extended"
   },
   "devDependencies": {
